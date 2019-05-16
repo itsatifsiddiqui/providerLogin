@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
     _password = TextEditingController(text: "");
   }
 
-
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserRepository>(context);
@@ -80,10 +79,37 @@ class _LoginPageState extends State<LoginPage> {
                                 ));
                             }
                           },
-                          child: Text("Sign In",
-                              style: style.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold)),
+                          child: Text(
+                            "Sign In",
+                            style: style.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ),
+              SizedBox(height: 20),
+              user.status == Status.Authenticating
+                  ? Center(child: CircularProgressIndicator())
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Material(
+                        elevation: 5.0,
+                        borderRadius: BorderRadius.circular(30.0),
+                        color: Colors.red,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            if (!await user.signInWithGoogle())
+                              _key.currentState.showSnackBar(SnackBar(
+                                content: Text("Something is wrong"),
+                              ));
+                          },
+                          child: Text(
+                            "Sign In With Google",
+                            style: style.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
